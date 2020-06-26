@@ -15,14 +15,16 @@ body {
  }
  
 
- .wrapper .sidebar { position: fixed;
+ .wrapper .sidebar {position: fixed;
 width: 200px;
-height: 80%;
-background: #DDEAE3; 
+height: 100%;
+background: #DDEAE3;
+top: 0;
+left:0; 
 padding:  45px 0}
 
 .wrapper .sidebar ul li {
-  margin: 10px 0;
+  margin: 10px 5;
 }
 
 .wrapper .image { position: fixed;
