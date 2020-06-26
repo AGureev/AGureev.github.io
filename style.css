@@ -26,8 +26,8 @@ padding:  45px 0}
 }
 
 .wrapper .image { position: fixed;
-  margin-top: 600px;
- margin-left: 1000px;}
+  bottom: 0;
+  right: 0;}
 
 .wrapper .sidebar ul li a {
 color: black;
