@@ -7,18 +7,7 @@ body {
   line-height: 27px;
 }
 
- .wrapper .sidebar ul li{
-  padding: .5em;
-  border: 1px #ddd solid;
-  background: linear-gradient(to right, #eee, #eee);
-  background-repeat: no-repeat;
-  background-size: 0 100%;
-  transition: background-size 1s 0s;
-}
-
-.wrapper .sidebar ul li:hover {
-  background-size: 100% 100%;
-}
+.wrapper .sidebar ul li a:hover {position: relative; right: -5px ;}
 
 
 .wrapper { display: flex; 
@@ -29,10 +18,10 @@ body {
 width: 200px;
 height: 80%;
 background: #DDEAE3; 
-padding:  30px 0}
+padding:  45px 0}
 
 .wrapper .sidebar ul li {
-  margin: 5px 0;
+  margin: 10px 0;
 }
 
 .wrapper .sidebar ul li a {
@@ -45,7 +34,7 @@ display: block;
   margin-left: 210px;
 }
 
-.wrapper .main_content .header {margin-top: 5px}
+.wrapper .main_content .header {margin-top: 15px}
 
 .wrapper .main_content .contact {margin-top: 10px;}
 
