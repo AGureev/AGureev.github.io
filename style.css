@@ -11,10 +11,9 @@ body {
 
 
 .wrapper { display: flex; 
-}
-
-.wrapper .main_content .header {position: fixed;}
-.wrapper .main_content .whatever {position: relative;}
+  position: relative;
+ }
+ 
 
  .wrapper .sidebar { position: fixed;
 width: 200px;
