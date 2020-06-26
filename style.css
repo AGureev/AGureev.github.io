@@ -25,6 +25,10 @@ padding:  45px 0}
   margin: 10px 0;
 }
 
+.wrapper .image { position: fixed;
+  top: 600px;
+ left: 1000px;}
+
 .wrapper .sidebar ul li a {
 color: black;
 display: block;
