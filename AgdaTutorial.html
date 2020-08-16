@@ -38,7 +38,7 @@
             
             <p>With that said, let us delve into what one needs to start up using Agda. Now, as we have mentioned, Agda is very bare-bones as it very much resembles the formal argumentation in type theory. The upside of that is that there are very few things one needs in order to successfully use to close to full capacity.</p>
             
-            <p>Depending on how you installed Agda, once you launch your .agda file in the editor, you will need to start up the Agda mode, which is called &quot;loading.&quot; Loading happens at all at once, i.e. is not incremental, by pressing Cntrl+C Cntrl+L. There are no steps like in Coq, so be careful not to write out too much in between the checks, as you may get lost in the error messages. Hence we should try to load Agda as much as possible whilst defining new stuff. You can be successfully working with Agda with a belief that there are only two ways of doing stuff: defining inductive types and defining functions, which are represented by two different procedures. Let us start with inductive types.</p>
+            <p>Depending on how you installed Agda, once you launch your .agda file in the editor, you will need to start up the Agda mode, which is called &quot;loading.&quot; Loading happens at all at once, i.e. is not incremental, by pressing Ctrl+C Ctrl+L. There are no steps like in Coq, so be careful not to write out too much in between the checks, as you may get lost in the error messages. Hence we should try to load Agda as much as possible whilst defining new stuff. You can be successfully working with Agda with a belief that there are only two ways of doing stuff: defining inductive types and defining functions, which are represented by two different procedures. Let us start with inductive types.</p>
             
             <p>Agda knows that you are about to present it with an inductive definition for a type by typing &quot;data&quot; at the beginning of the line. Afterward, we provide a name for our type, where it belongs type-wise and its constructors. Here is our canonical example of natural numbers (note that the double lines on the side specify comments in Agda which mak everything on the line a comment):</p>
             
@@ -136,18 +136,18 @@
             <p style="background-color: #d0d6da"> _plus_ : &#8469; &rarr; &#8469; &rarr; &#8469;<br>
             zero plus n = ?</p>
             
-            <p>and after loading - pressing Cntrl+C Cntrl+L - we get something akin to this (results may vary depending on the editor, we are using the VSCode Agda Mode extension):</p>
+            <p>and after loading - pressing Ctrl+C Ctrl+L - we get something akin to this (results may vary depending on the editor, we are using the VSCode Agda Mode extension):</p>
             
             <p style="background-color: #d0d6da"> _add_ : &#8469; &rarr; &#8469; &rarr; &#8469; <br>
             n add m = {! 0!}</p>
             
-            <p>Alongside that, the goal line changes to indicate what exactly should the intestines of the brackets include. In our case, we need to produce a natural number, hence the goal is &quot;?0 : &#8469;&quot;. What we need in our definition here, as we have mentioned, is the case analysis on constructors. The way to make Agda consider this is by first clicking into the brackets, to let Agda know that you are considering this specific gap, then pressing Cntrl+C Cntrl+C, which will prompt a line at the bottom of your IDE saying something about considering cases. Enter the needed variable there, press enter, and Agda will do case analysis on that variable. So, in our case, we put in &quot;n&quot; in the box, and then press enter, getting</p>
+            <p>Alongside that, the goal line changes to indicate what exactly should the intestines of the brackets include. In our case, we need to produce a natural number, hence the goal is &quot;?0 : &#8469;&quot;. What we need in our definition here, as we have mentioned, is the case analysis on constructors. The way to make Agda consider this is by first clicking into the brackets, to let Agda know that you are considering this specific gap, then pressing Ctrl+C Ctrl+C, which will prompt a line at the bottom of your IDE saying something about considering cases. Enter the needed variable there, press enter, and Agda will do case analysis on that variable. So, in our case, we put in &quot;n&quot; in the box, and then press enter, getting</p>
             
             <p style="background-color: #d0d6da"> _add_ : &#8469; &rarr; &#8469; &rarr; &#8469; <br>
             zero add m = {! 0!}<br>
             succ n add m = {! 1!}</p>
             
-            <p>Now, we are ready to wholeheartedly define our function. In the first placeholder, we type in &quot;m&quot; and then press Cntrl+C Cntrl+Space in order for Agda to accept out value. Of course, for the second definition, we need to use the lower-level value of the function, which we can do straightforwardly: Agda does not need additional commands to accept recursive arguments. So we simply type in &quot;succ (n add m)&quot;, press Cntrl+C Cntrl+Space once more and we are done.</p>
+            <p>Now, we are ready to wholeheartedly define our function. In the first placeholder, we type in &quot;m&quot; and then press Ctrl+C Ctrl+Space in order for Agda to accept out value. Of course, for the second definition, we need to use the lower-level value of the function, which we can do straightforwardly: Agda does not need additional commands to accept recursive arguments. So we simply type in &quot;succ (n add m)&quot;, press Ctrl+C Ctrl+Space once more and we are done.</p>
             
             <p>Since this is the last instance in which we will mention the natural numbers in a computational context, let us mention a pragma concerning the natural numbers, namely</p>
             
@@ -182,7 +182,7 @@
             conj true b2 = {! 0!}<br>
             conj false b2 = {! 1!}</p>
             
-            <p>with the latter hole that needs to be closed up with &quot;false&quot;. Now, to close up the first one, we need to also conduct case analysis on b2, which is naturally done for Agda in the usual manner of pressing Cntrl+C twice. Hence we end up with the complete definition of</p>
+            <p>with the latter hole that needs to be closed up with &quot;false&quot;. Now, to close up the first one, we need to also conduct case analysis on b2, which is naturally done for Agda in the usual manner of pressing Ctrl+C twice. Hence we end up with the complete definition of</p>
             
             <p style="background-color: #d0d6da"> conj : 𝔹 &rarr; 𝔹 &rarr; 𝔹 <br>
             conj true true = true<br>
