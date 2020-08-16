@@ -30,7 +30,7 @@
     </div>
 
     <div class = "main_content">
-        <div class = "header"><font size="+2"><strong>Artem Gureev : <em> Type Checking Chickens Tutorials : Coq </em>  </strong></font size> <hr> </div>
+        <div class = "header"><font size="+2"><strong>Artem Gureev : <em> Type Checking Chickens Tutorials </em> : Coq  </strong></font size> <hr> </div>
         <div class = "whatever">
             <p>Coq is an interactive theorem prover based on the Gallina functional programming language. It is widely used and has had a very good run, which means that it <br>
                 1) is stable <br>
@@ -58,13 +58,13 @@
                 
                 <p>&quot;Definition&quot; is a very versatile one. It is a stand-in for theorems, lemmas, general functions that you want to declare &quot;interactively&quot; etc. Here is an example of a definition.</p>
                 
-                <p> <h9><span>Definition idmap : forall (A : Type), A -> A.  <br>
+                <p style="background-color: #d0d6da"> <h9><span>Definition idmap : forall (A : Type), A -> A.  <br>
                  intros A a. &nbsp; &nbsp; (* this introduces names for a variable for a type A and a variable for a term of A *)<br>
                  exact a. &nbsp; &nbsp; (* since the goal is to prove A, we need its witness, so a suffices, which we announce to Coq using exact *)<br>
                  Defined. </span> </h9> </p>
                  
                  <p>or, identically </p>
-                 <p>
+                 <p style="background-color: #d0d6da">
                  <h9> <span>Definition idmap (A : Type) : A -> A := fun a => a. </span> </h9> </p>
                  
                 <p>Now, this may be a lot to absorb in terms of notations (which we will make clear later), 
