@@ -58,16 +58,25 @@
                 
                 <p>&quot;Definition&quot; is a very versatile one. It is a stand-in for theorems, lemmas, general functions that you want to declare &quot;interactively&quot; etc. Here is an example of a definition.</p>
                 
-                <p>Definition idmap : forall (A : Type), A -> A. <br>
-                 intros A a. (* this introduces names for a variable for a type A and a variable for a term of A *)<br>
-                 exact a. (* since the goal is to prove A, we need its witness, so a suffices, which we announce to Coq using exact *)<br>
-                 Defined.<br>
-                 <br>
-                 or, identically<br>
-                 <br>
-                Definition idmap (A : Type) : A -> A := fun a => a. <br>
-                 <br>
-                Now, this may be a lot to absorb in terms of notations (which we will make clear later), but let us slowly go through it. Firstly, note that anything in (* *) is considered a comment in Coq. Now, the definition above can be read either as a theorem or as a definition of a function, a dichotomy we will return to later for recursive definitions. One can notice that what I am doing is, choosing some type A, I am defining an identity map on that type. Or, identically, I can also look at this as a roof that given a witness of type A, I can produce a witness of type A. Generally, definitions are versatile and are the usual way one proves functions. Note that Definitions that have proofs in them need to be closed up by &quot;Defined.&quot; at the end. Make it an utmost need to remember that a dot must be placed after &quot;Defined.&quot; Dots are the way Coq understands that a certain command is being fed to it, a way to concentrate on one action at a time. Dots are paramount and ought to accompany any discrete action that you are communicating to Coq. You will see implicitly what that means in our examples, so pay attention to where the dots appear.</p>
+                <p> <h9><span>Definition idmap : forall (A : Type), A -> A.  <br>
+                 intros A a. &nbsp; &nbsp; (* this introduces names for a variable for a type A and a variable for a term of A *)<br>
+                 exact a. &nbsp; &nbsp; (* since the goal is to prove A, we need its witness, so a suffices, which we announce to Coq using exact *)<br>
+                 Defined. </span> </h9> </p>
+                 
+                 <p>or, identically </p>
+                 <p>
+                 <h9> <span>Definition idmap (A : Type) : A -> A := fun a => a. </span> </h9> </p>
+                 
+                <p>Now, this may be a lot to absorb in terms of notations (which we will make clear later), 
+                    but let us slowly go through it. Firstly, note that anything in (* *) is considered a comment in Coq. 
+                    Now, the definition above can be read either as a theorem or as a definition of a function, a dichotomy we will return to later
+                     for recursive definitions. One can notice that what I am doing is, choosing some type A, I am defining an identity map on that 
+                     type. Or, identically, I can also look at this as a roof that given a witness of type A, I can produce a witness of type A. 
+                     Generally, definitions are versatile and are the usual way one proves functions. Note that Definitions that have proofs in 
+                     them need to be closed up by &quot;Defined.&quot; at the end. Make it an utmost need to remember that a dot must be placed 
+                     after &quot;Defined.&quot; Dots are the way Coq understands that a certain command is being fed to it, a way to concentrate on
+                      one action at a time. Dots are paramount and ought to accompany any discrete action that you are communicating to Coq. You will 
+                      see implicitly what that means in our examples, so pay attention to where the dots appear.</p>
                 
                 <p>We should also mention, that there is an alternative to ending our definitions with &quot;Defined.&quot; We could instead do away with &quot;Qed.&quot; However, it will appear impractical in most cases. &quot;Qed.&quot; truncates our definition, in a sense, forgetting its proof content and instead simply looking at it as a basic fact akin to an axiom. While this may seem ok in most cases, it is simply more practical to use &quot;Defined.&quot; as much as possible.</p>
                 
