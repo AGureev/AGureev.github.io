@@ -59,8 +59,8 @@
                 <p>&quot;Definition&quot; is a very versatile one. It is a stand-in for theorems, lemmas, general functions that you want to declare &quot;interactively&quot; etc. Here is an example of a definition.</p>
                 
                 <p style="background-color: #d0d6da"> <h9><span>Definition idmap : forall (A : Type), A -> A.  <br>
-                 intros A a. &nbsp; &nbsp; (* this introduces names for a variable for a type A and a variable for a term of A *)<br>
-                 exact a. &nbsp; &nbsp; (* since the goal is to prove A, we need its witness, so a suffices, which we announce to Coq using exact *)<br>
+                 intros A a. &nbsp; &nbsp; (* this introduces names for a variable of a type (A) and a variable for a term of the selected type (a) *)<br>
+                 exact a. &nbsp; &nbsp; (* since the goal is to prove A, we need its witness, so "a" suffices, which we announce to Coq using exact *)<br>
                  Defined. </span> </h9> </p>
                  
                  <p>or, identically </p>
