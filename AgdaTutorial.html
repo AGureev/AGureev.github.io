@@ -32,24 +32,282 @@
     <div class = "main_content">
         <div class = "header"><font size="+2"><strong>Artem Gureev : <em> Type Checking Chickens Tutorials </em> : Agda  </strong></font size> <hr> </div>
         <div class = "whatever">
-        <p> Welcome to Type Checked Chickens! This page contains brief guides to two interactive theorem provers supporting HoTT: Coq and Agda for people with a background in Type Theory. </p>
+            <p>Agda is an interactive theorem prover/functional programming language which boasts a Haskell-like syntax and very strict reasoning. What this means is that reasoning in Agda is very much similar to the reasoning in formal Type Theory without the sugar-coating of tactics. While this is a very raw-bones approach, it does have several advantages, first of which is close control over what is exactly happening when one defines functions and how one invokes case analysis. Certainly, philosophically it is much more rigorous writing down the records and induction principles for types oneself instead of having them be generated automatically as is done in Coq.</p>
 
-            <p>For those that are only starting their journey in Type Theory and its applications, it is recommended to consult Coq and Agda's wonderful Foundation texts.
-             However, it is a bit tedious to go through them for people who already have a grasp on Type Theory and simply want a demonstration 
-             and an adequate cheatsheet of the language's syntactical needs to start working with the theorem provers right away. 
-             These two small documents are just for them. </p>
+            <p>Moreover, a person interested in contemporary developments of HoTT will be happy to hear that Agda also has support for cubical type theory!</p>
             
-             <p>Note that this is supposed to serve as an extremely short introduction into the main functionality of Agda and Coq, 
-                 what that means is that some (if not all) of the material and actions that will be presented may be extremely inefficient or 
-                 generally have better ways of being done. Hence one is recommended to use the documents for a smooth start and then move to the 
-                 Foundations in order to find some proper treatment of selected topics and actions. </p>
+            <p>With that said, let us delve into what one needs to start up using Agda. Now, as we have mentioned, Agda is very bare-bones as it very much resembles the formal argumentation in type theory. The upside of that is that there are very few things one needs in order to successfully use to close to full capacity.</p>
             
-            <p>I am thankful to Ilia Vlasov for helping in starting out using both systems and whose advice in mastering them I am trying to translate in written 
-                format through these tutorials so that other people lacking a practical guide can begin their journey smoother. </p>
-            <ul> 
-                <li><a style="text-decoration:none" href="CoqTutorial.html">Coq Tutorial</a></li>
-                <li><a style="text-decoration:none" href="AgdaTutorial.html">Agda Tutorial</a></li>
-            </ul>
+            <p>Depending on how you installed Agda, once you launch your .agda file in the editor, you will need to start up the Agda mode, which is called &quot;loading.&quot; Loading happens at all at once, i.e. is not incremental, by pressing Cntrl+C Cntrl+L. There are no steps like in Coq, so be careful not to write out too much in between the checks, as you may get lost in the error messages. Hence we should try to load Agda as much as possible whilst defining new stuff. You can be successfully working with Agda with a belief that there are only two ways of doing stuff: defining inductive types and defining functions, which are represented by two different procedures. Let us start with inductive types.</p>
+            
+            <p>Agda knows that you are about to present it with an inductive definition for a type by typing &quot;data&quot; at the beginning of the line. Afterward, we provide a name for our type, where it belongs type-wise and its constructors. Here is our canonical example of natural numbers (note that the double lines on the side specify comments in Agda which mak everything on the line a comment):</p>
+            
+            <p style="background-color: #d0d6da">
+            data &#8469; : Set where -- &quot;where&quot; is a stand-in for the start of the definition <br>
+             zero : &#8469; -- note the space at the beginning of the line here <br>
+             succ : &#8469; &rarr; &#8469; -- and here <br>
+            </p>
+            
+            <p>(alternatively, one can also enclose comments in {- -} brackets )</p>
+            
+            <p>Note that Agda seems to be, unlike Coq, very smart in understanding which elements ought to be constructors. This is a visual lie that is present only when looking at isolated cases. Earnestly, it hinges on the &quot;hidden&quot; syntax of spaces and indents. What this means is that making spaces between certain elements is a big deal for Agda so once should use spaces sparingly, it is a resource, rather than a cosmetic appliance as in Coq. For example, above we can see that before zero and succ generators there is a space. This means that we are signaling to Agda, after the declaration of the name for an inductive type, that these are specifically its constructors. As long as we are doing indents in the next line, we are letting Agda know that we, apparently want that next line to be yet another constructor. This may cause a lot of errors, so be careful. The burdensome extra notation of Coq is here supplanted by making the user extra-careful. A good hint is thinking of the indentations as markers that indicate that the specified element ought to be structurally &quot;in&quot; the defined object. Admittedly, it is a bit of a faulty intuition and one will see why when we come to defining terms.</p>
+            
+            <p>Now, let us unfold some extra notation and architecture simply looking at the above definition. As usual, specifying zero and succ (and then stopping, i.e. not adding any more generators) is equivalent to a semantic statement that there are precisely two ways of making sure we have an element of &#8469; , namely, it is either zero, or, given some natural number, we can apply succ to it to produce its element. This is standard, generators are just straightforward formalization of the construction rules of types. Similarly, defining the coproduct, we will specify its constructors as left and right injections belonging to function types from the respective types to the coproduct.</p>
+            
+            <p>Similarly, we will define our bool &#55349;&#56633; as generated by true and false, and unit &#55349;&#56652; as generated by one element tt. The empty type &#55349;&#57304; is generated by nothing. Here is the Agda code pertaining to our definitions:</p>
+            
+            <p style="background-color: #d0d6da">data &#55349;&#56633; : Set where<br>
+             true : &#55349;&#56633; <br>
+             false : &#55349;&#56633;</p>
+            
+             <p style="background-color: #d0d6da">data &#55349;&#56652; : Set where<br>
+             tt : &#55349;&#56652;</p>
+             
+             <p style="background-color: #d0d6da">data &#55349;&#57304; : Set where</p>
+            
+            <p>Once again: note the spaces. Being pedantic, we should also say that the definition for the empty type is not correct above as the user may screw up the definition if they write anything after it in Agda with a space. So, the best part about writing tutorials for Agda is that - formally - all the code you posted is not prima facie correct.</p>
+            
+            <p>Even if the inductive definitions are given, however, nothing else is, once we have defined our type. That means no recursors or inductive principles available for direct use. Those will have to be defined separately, with analysis by cases Agda has. That is, what it does have is an automatic possibility of defining functions by constructor cases on terms of inductive types, which gives us enough expressive power to define recursion and inductive principles.</p>
+            
+            <p>The &quot;where&quot; command is the central one in Agda for inductive definitions, specifying the start of constructors specifications.</p>
+            
+            <p>Note that we gave the naturals the name &#8469; here for a reason: Agda has an inbuilt support for Unicode, making the environment extremely friendly for us mathematicians, even if the code is sometimes not that straightforward (for example &#8469; is given by \bN and &#8801; by \==). However, there are numerous cheatsheets for symbols available online for those in need.</p>
+            
+            <p>The usage of Unicode also means that some Unicode characters are prebuilt into our type theory, specifically when encountering Pi-types and function types, the former is specified by &#8704; (written \forall) and the latter by &rarr; (written \to). With function types the notation is evident, i.e. between two types A and B we have a function type A &rarr; B. For the Pi-type we have some additional notation to specify. Once we have declared our ranges, for example (A : Type) and (a : A) and some family P : A &rarr; Type, we have our Pi-type &#8704; (A : Type) (a : A) &rarr; P a. So the forall symbol, firstly, gets used on several variables of different types in a row, following the usual convention, and, secondly, announces the codomain via specifying it as a function to a type family applied to a chosen element in its domain via the &rarr; symbol. Note that the argument information is usually parsed via parentheses.</p>
+            
+            <p>Also notice that &quot;Set&quot; is a stand-in for a universe. Quite an unfortunate naming, specifically for those interested in HoTT, yet sometimes life is just unfair. Note that Agda here differs from Coq. It cannot infer universe levels and instead, if a level is left unspecified, thinks that the type is located at level zero. So saying that &quot;A : Set&quot; means that A is a type at the o-th universe level. The levels for universes can be provided explicitly as well, by specifying an explicit variable - seemingly typeless - for then to be mentioned near Set once you declare your types. However, for that, it is usually best to load some additional data from Agda, in order to have a proper understanding of what is going on with the universes. Even if the whole philosophy of these tutorials is to work &quot;library-free,&quot; if you want to specify universe levels explicitly, type in</p>
+            
+            <p style="background-color: #d0d6da">
+            open import Agda.Primitive public using (Level; lzero; lsuc; _&#8852;_; Set&#969;) <br>
+            </p>
+            
+            <p>at the beginning of the page. We will see an example of level-specification right away, in our examples of infix notations, which will finish up our discussion of inductive types.</p>
+            
+            <p>A very useful feature of Agda is the ability to specify notations as infix right at the very definition. That is, we have a way to define - for example - inductive types of two arguments in Agda in a way that will treat its name both as a prefix name for a function and as an infix name with arguments on both sides. To see how this plays out, let us define an already mentioned coproduct type:</p>
+            
+            <p style="background-color: #d0d6da">data _+_ {l1 l2 } (A : Set l1) (B : Set l2) : Set (l1 &#8852; l2) where<br>
+             inl : A &rarr; A + B<br>
+             inr : B &rarr; A + B</p>
+            
+            <p>This seems to be a much more complex definition that we gave before, and mainly due to specifying the levels for our universes. However, we will return to these points soon, let us first talk about the infix notation.</p>
+            
+            <p>Here, we have specified that we have a function of two arguments (where these two arguments are types from two universes) that we named +. Moreover, we have specified that it is a function that can be put between the two types and still work the needed way, by putting underscored on its sides, making _+_. In this way, we are able to make any sort of a two-placed function infix by underscoring it on its sides. However, that does not stop the function from being able to be used prefix as well. So if A and B are types we have that &quot;A + B&quot; and &quot;_+_ A B&quot; designate the same type: the coproduct of A and B.</p>
+            
+            <p>Generally, defining the infix notation by underscoring is enough, yet if Agda asks for - or if you simply want to - 
+                impose the binding on the notation, i.e. how rightly does the infix bind, simply type in</p>
+            
+                <p style="background-color: #d0d6da"> infixl n _foo_  </p> <p> where n is the level of binding (the higher, the tighter), 
+                    and &quot;_foo_&quot; is the name of the function. One can put several functions in the same line after a space to 
+                    designate that it belongs to the same binding level.</p>
+            
+            <p>
+            Now, one should be ready to point out that in truth our function has 4 arguments instead of two if we count the universe levels we needed to declare, in which case the infix notation will not be of much use. However, we have a way of making Agda forgive us for not telling it an additional structure which it can guess itself. For example, Agda will surely guess the levels of A and B if we give it A and B, as they already belong to some universe of some level. So what we can do is instead put the information about the levels in curly - rather than round - brackets. This makes the arguments closed inside such brackets implicit and treat functions of many arguments as functions of few, given that Agda can infer them from the explicit variables. If it does not do it successfully, one can always provide implicit arguments explicitly by writing it out in the needed place in curly brackets. So, if A is in Set l1 and B is in Set l2 we can say that &quot;_+_ {l1} {l2} A B&quot; is well-typed. Moreover, maybe we want to avoid mentioning the level of B not to overburden our notation. So, for some reason we only want to specify the level of A. We can do this by writing &quot;_+_ {l1} {_} A B&quot;. Generally, the underscore allows the user to leave unessential arguments and variable declarations implicit. As long as they are indeed unimportant, Agda should be able to figure out their importance itself and allow you to skip it (or, again, just infer the implicit argument when there is enough information). So, remember, if you feel lazy and think that something is evident or can be skipped (in terms of arguments), just put underscores.</p>
+            
+            <p>Generally, the infixes are not the only way one can conveniently define functions. There are also ways of naturally defining truncation notation (that is, if P is a type, then &#8741;P&#8741; is its truncation) by naming our inductive type &#8741;_&#8741; and making explicit only the type that we will want to truncate. Note that this does not mean that one can define truncation in Agda easily. Both Coq and Agda do not have native support for higher inductive types, which makes their implementation rather... tasteless. One is encouraged to consult outside sources on the formalization of HITs in Agda.</p>
+            
+            <p>Let us talk about universe levels for a bit as well. Generally, when we have two types and generate a third one (product, coproduct, function, etc) we have a type whose level is one that is the largest of the two universes that we were given in the beginning. The way that Agda goes about it is to say that its level is &quot;l1 &#8852; l2&quot; if the levels of the first two are l1 and l2. The symbol is written as \lub and is, of course, a stand-in for the least upper bound. If you want to talk about the properties of a next-level universe you can also - given some level l - talk about &quot;Set (lsuc l) &quot;. We should also mention that levels do have an explicit type, which one can put them in during specification, namely, they live in the type Level, so one can write &quot;l1 l2 : Level,&quot; so we have our universe polymorphism inside of Coq.</p>
+            
+            <p>One will also be happy to hear that Agda has support for cumulative universes (although not natively, so be wary of using cumulative arguments from the get-go)! In order to explain how to launch the environment for supporting cumulativity, we need to mention pragmas, which are commands in brackets which interact with the Agda libraries. So, declaring</p>
+            
+            <p style="background-color: #d0d6da">{-# OPTIONS --cumulativity #-}</p>
+            
+            <p>automatically makes our universes cumulative.</p>
+            
+            <p>This finishes up our preliminaries and discussions of inductive types. We move on to function definitions and the usage of the functional apparatus of Agda. Functions are declared right away without the need to write any additional markups. If you want to declare a function: just start with its name. Here, the same goes for both recursive and usual functions. No separation a-la Coq is needed. Structurally, they will appear the same.</p>
+            
+            <p>The discussion of functions with examples may be a bit complicated with Agda compared to Coq, since Agda is interactive inasmuch as the user is in the middle of the proof. As soon as the proof is finished, it simply checks that all the information is in place and the function is defined. In short, once the function is declared, there is no explanation of how one got there, just the pure result and the fact that it is correct. Nevertheless, it offers very straightforward and intuitive interaction in the process of the proof which we will try to textually show using the definition of addition for natural numbers.</p>
+            
+            <p>Here is how it looks finalized (note that we will use _plus_ since we have already declared _+_ to be a function of two type arguments, which we will certainly encounter more than the natural numbers):</p>
+            
+            <p style="background-color: #d0d6da"> _plus_ : &#8469; &rarr; &#8469; &rarr; &#8469;<br>
+            zero plus m = m<br>
+            (succ n) plus m = succ (n plus m) -- note the lack of spacing</p>
+            
+            <p>This is nothing interesting, really. To give a recursive definition, we need to give a definition on cases with a possible use of a lower-value of our variables. This is exactly the way that Agda wants its recursive definitions to be given as well. Yet the above is the end-product. The real interest is in how can we get there. Sure, we can just paste that definition, but as a beginner (and once you encounter some complicated functions) you will need pointers as to how to get their values, i.e. you will want to interact with the theorem prover.</p>
+            
+            <p>So, suppose we want to start defining _plus_. The way you do it is by providing an explicit function depending on which type does _plus_ lie in. In our case, it lies in &#8469; &rarr; &#8469; &rarr; &#8469;, so we specify our input using infix notation: n plus m, so that we declare our first variable to be n and our second to be m, both taken from our natural numbers. Then, to declare how we want to define it, we insert the proper equality &quot;=&quot; symbol, which functions in Agda solely as a definitional equality symbol used in defining functions (that is, we will need to define equality later, which this tutorial will do explicitly). So, what we have present is</p>
+            
+            <p style="background-color: #d0d6da"> _plus_ : &#8469; &rarr; &#8469; &rarr; &#8469;<br>
+            n plus m =</p>
+            
+            <p>At this point, we want some help from Agda. The way we do it is by literally putting in the question mark &quot;?&quot; after the equality and loading Agda. Hence we start with</p>
+            
+            <p style="background-color: #d0d6da"> _plus_ : &#8469; &rarr; &#8469; &rarr; &#8469;<br>
+            zero plus n = ?</p>
+            
+            <p>and after loading - pressing Cntrl+C Cntrl+L - we get something akin to this (results may vary depending on the editor, we are using the VSCode Agda Mode extension):</p>
+            
+            <p style="background-color: #d0d6da"> _add_ : &#8469; &rarr; &#8469; &rarr; &#8469; <br>
+            n add m = {! 0!}</p>
+            
+            <p>Alongside that, the goal line changes to indicate what exactly should the intestines of the brackets include. In our case, we need to produce a natural number, hence the goal is &quot;?0 : &#8469;&quot;. What we need in our definition here, as we have mentioned, is the case analysis on constructors. The way to make Agda consider this is by first clicking into the brackets, to let Agda know that you are considering this specific gap, then pressing Cntrl+C Cntrl+C, which will prompt a line at the bottom of your IDE saying something about considering cases. Enter the needed variable there, press enter, and Agda will do case analysis on that variable. So, in our case, we put in &quot;n&quot; in the box, and then press enter, getting</p>
+            
+            <p style="background-color: #d0d6da"> _add_ : &#8469; &rarr; &#8469; &rarr; &#8469; <br>
+            zero add m = {! 0!}<br>
+            succ n add m = {! 1!}</p>
+            
+            <p>Now, we are ready to wholeheartedly define our function. In the first placeholder, we type in &quot;m&quot; and then press Cntrl+C Cntrl+Space in order for Agda to accept out value. Of course, for the second definition, we need to use the lower-level value of the function, which we can do straightforwardly: Agda does not need additional commands to accept recursive arguments. So we simply type in &quot;succ (n add m)&quot;, press Cntrl+C Cntrl+Space once more and we are done.</p>
+            
+            <p>Since this is the last instance in which we will mention the natural numbers in a computational context, let us mention a pragma concerning the natural numbers, namely</p>
+            
+            <p style="background-color: #d0d6da"> {-# BUILTIN NATURAL &#8469; #-}</p>
+            
+            <p>which makes your file understand &quot;0&quot; as &quot;zero,&quot; &quot;1&quot; as &quot;succ zero&quot;, etc. Of course, this also works for any name of your naturals, simply replace &#8469; in the pragma there and this will work. Other pragmas import specific definitions from the main library, so you may be interested in looking at the possibility of using those if you are a bit hesitant in defining all the supplementary material you may not need other than in specific circumstances.</p>
+            
+            <p>We are, of course, also capable of producing more complex inductive definitions, even if a bit less intuitively than we usually do in mathematics. For example, let us consider a function evaluating whether a number is even and define it by a two-level induction:</p>
+            
+            <p style="background-color: #d0d6da"> evenb : &#8469; &rarr; &#55349;&#56633;<br>
+            evenb zero = true<br>
+            evenb (succ zero) = false<br>
+            evenb (succ (succ n)) = evenb n</p>
+            
+            <p>The definition looks standard, yet the way that Agda will aid you to present it is very matter-of-factural, that is - as we mentioned - by double induction. You will fist ask Agda to aid with &quot;evenb n&quot; with n our stand in for a natural number, then you will proceed by cases on n. Next, you fill in &quot;true&quot; for the base case and wonder what to do with &quot;succ n.&quot; Since n is a term of an inductive type, Agda will understand you asking do do cases on n once again, this time producing</p>
+            
+            <p style="background-color: #d0d6da"> evenb : &#8469; &rarr; &#55349;&#56633;<br>
+            evenb zero = true<br>
+            evenb (succ zero) = {! 0!}<br>
+            evenb (succ (succ n)) = {! 1!}</p>
+            
+            <p>which allows us to finish the definition. Remember, as long as Agda sees any variable of an inductive type, it allows case analysis of it.</p>
+            
+            <p>Let us also consider recursion on several variables by thinking about conjunction operation on booleans:</p>
+            
+            <p style="background-color: #d0d6da"> conj : &#55349;&#56633; &rarr; &#55349;&#56633; &rarr; &#55349;&#56633; <br>
+            conj b1 b2 = {! 0!}</p>
+            
+            <p>Now, we proceed by case analysis on, firstly, b1, which gives us</p>
+            
+            <p style="background-color: #d0d6da"> conj : &#55349;&#56633; &rarr; &#55349;&#56633; &rarr; &#55349;&#56633; <br>
+            conj true b2 = {! 0!}<br>
+            conj false b2 = {! 1!}</p>
+            
+            <p>with the latter hole that needs to be closed up with &quot;false&quot;. Now, to close up the first one, we need to also conduct case analysis on b2, which is naturally done for Agda in the usual manner of pressing Cntrl+C twice. Hence we end up with the complete definition of</p>
+            
+            <p style="background-color: #d0d6da"> conj : &#55349;&#56633; &rarr; &#55349;&#56633; &rarr; &#55349;&#56633; <br>
+            conj true true = true<br>
+            conj true false = false<br>
+            conj false b2 = false</p>
+            
+            <p>This provides basically all the needed introduction to the practical functionality fo Agda and its bare bones. As mentioned, the system is indeed very rigorous and lacking in sugar, so everything else is basically up to the user. For the sake of being complete, let us stop to talk about our recursions/inductions and the important facts for practicing HoTT.</p>
+            
+            <p>So, we have mentioned that the case analysis Agda provides is enough to specify our recursors and inductions. Let us back that up with two examples. First, let us recall our coproduct and define its recursors and induction principles.</p>
+            
+            <p style="background-color: #d0d6da"> rec+ : &#8704; {l1 l2 l3} {A : Set l1} {B : Set l2} {C : Set l3} &rarr; <br>
+             (A &rarr; C) &rarr; (B &rarr; C) &rarr; (A + B &rarr; C)<br>
+            rec+ f g (inl x) = f x<br>
+            rec+ f g (inr x) = g x</p>
+            
+            <p style="background-color: #d0d6da"> ind+ : &#8704; {l1 l2 l3} {A : Set l1} {B : Set l2} {C : A + B &rarr; Set l3} &rarr; <br>
+             ( &#8704; (a : A) &rarr; C (inl a)) &rarr; ( &#8704; (b : B) &rarr; (C (inr b)) ) &rarr; ( &#8704; (x : A + B) &rarr; C x)<br>
+            ind+ f g (inl x) = f x<br>
+            ind+ f g (inr x) = g x</p>
+            
+            <p>In terms of syntax, note that when one wants to spread the type of the function over different lines, never simply go by &quot;Enter,&quot; since that will make Agda think that you already started defining some poorly typed function. Use the space key - or double-space or tab - to indent your definition in a way that signals to Agda that you have not finished defining the type of the term. Secondly, be wary of using underscores in the names of your terms. Underscores are quite powerful in Agda, meaning that their use usually wreaks havoc on the interpretation by the checker. So try to never use underscores other than in specifying where the arguments go while defining functions.</p>
+            
+            <p>These definitions work perfectly fine, since when we start defining, our functions - take, for example, the recursor - we start with needing to specify the value of &quot;rec+ f g x&quot;. Asking Agda for help can allow us to do case analysis. Choosing &quot;x&quot; as the needed variable to split up produced two subgoals</p>
+            
+            <p style="background-color: #d0d6da"> rec+ : &#8704; {l1 l2 l3} {A : Set l1} {B : Set l2} {C : Set l3} &rarr; (A &rarr; C) &rarr; (B &rarr; C) &rarr; (A + B &rarr; C)<br>
+            rec+ f g (inl x) = {! 0!}<br>
+            rec+ f g (inr x) = {! 1!}</p>
+            
+            <p>due to the fact that the &quot;x&quot; is the term of the coproduct, which has two generators, namely, inl and inr. One can note that recursors are pretty much embedded into Agda through case analysis, so we basically lied at the beginning, yet for the greater good at being able to show the formulation of recursors and inductions directly inside our system.</p>
+            
+            <p>Similarly, we have our definition of the equality as the inductive type generated by the constant path:</p>
+            
+            <p style="background-color: #d0d6da"> data _&#8801;_ {l} {A : Set l} : A &rarr; A &rarr; Set l where<br>
+             refl : &#8704; {a} &rarr; a &#8801; a</p>
+             
+            <p>In which case we can define our induction principle by</p>
+            
+            <p style="background-color: #d0d6da"> ind== : &#8704; {l1 l2} {A : Set l1} &rarr;<br>
+             (C : (x y : A) &rarr; x &#8801; y &rarr; Set l2)<br>
+             (t : (a : A) &rarr; C a a refl) &rarr;<br>
+             (x y : A) &rarr; (p : x &#8801; y) &rarr; C x y p<br>
+            ind== C t a a refl = t a</p>
+            
+            <p>Which works by case analysis on &quot;p&quot; when considering the value of &quot;ind== C T x y p.&quot;</p>
+            
+            <p>Of course one is also capable of defining functions explicitly via mapping notation. There are multiple ways of making Agda look at your definition of a function as a mapping, yet the most readable and canonical one is always &#955; (written as \lambda, of course). So, we can, for example, define function composition by</p>
+            
+            <p style="background-color: #d0d6da"> _&#8728;_ : &#8704; {l1 l2 l3} {A : Set l1} {B : Set l2} {C : Set l3} (f : B &rarr; C) (g : A &rarr; B) &rarr; (A &rarr; C)<br>
+            f &#8728; g = &#955; x &rarr; f (g x)</p>
+            
+            <p>or, equivalently by</p>
+            
+            <p style="background-color: #d0d6da"> _&#8728;_ : &#8704; {l1 l2 l3} {A : Set l1} {B : Set l2} {C : Set l3} (f : B &rarr; C) (g : A &rarr; B) &rarr; (A &rarr; C)<br>
+            (f &#8728; g) x = f (g x)</p>
+            
+            <p>We, however, did not yet show how to use inductions in action other than in trivial cases. For this purpose, let us return to the natural numbers once more in order to provide the most intuitive demonstration. First, let us define an induction term for the natural numbers:</p>
+            
+            <p style="background-color: #d0d6da"> ind&#8469; : &#8704; {l1} (C : &#8469; &rarr; Set l1) &rarr; (C zero) &rarr; <br>
+             (forall (n : &#8469;) &rarr; (C n &rarr; C (succ n) )) &rarr; <br>
+             &#8704; (n : &#8469;) &rarr; C n <br>
+            ind&#8469; C p q zero = p<br>
+            ind&#8469; C p q (succ n) = q n (ind&#8469; C p q n)</p>
+            
+            <p>And function application for equalities:</p>
+            
+            <p style="background-color: #d0d6da"> ap : &#8704; {l1 l2} {A : Set l1} {B : Set l2} {x y : A} (f : A &rarr; B) &rarr; <br>
+             (x &#8801; y) &rarr; ( f x &#8801; f y) <br>
+            ap f refl = refl</p>
+            
+            <p>Now, let us prove something using induction, like the associativity of naturals. This will also showcase how alternate and more complicated way of reasoning works in Agda.</p>
+            
+            <p>So, we first define our proof as belonging to an appropriate type:</p>
+            
+            <p style="background-color: #d0d6da"> assoc&#8469; : &#8704; (n m k : &#8469;) &rarr; (n plus (m plus k)) &#8801; ((n plus m) plus k)</p>
+            
+            <p>Agda will check that it is well-typed by printing that the above is in need of definition, even the name for the term is declared. Hence it is well-typed and we need to provide our proof. However, the way we use before does not exactly work. We can try to do cases on n, m, and k, yet that will not do us much good without the inductive hypothesis. However, we do not get an inductive hypothesis by case analysis, so it will not work to just put a &quot;?&quot; after the definitional equality and ask Agda for an input. Instead, we work on our own here, in a backwards direction. We first find a function which can get us the needed proof provided the necessary constraints. In our case, it is ind&#8469;. So, we write</p>
+            
+            <p style="background-color: #d0d6da"> assoc&#8469; : &#8704; (n m k : &#8469;) &rarr; (n plus (m plus k)) &#8801; ((n plus m) plus k)<br>
+            assoc&#8469; n m k = ind&#8469;</p>
+            
+            <p>However, we can still ask Agda for help, even here. We can put a question mark in place of every argument of ind&#8469; for it to let us know which types they ought to occupy. Hence, we write</p>
+            
+            <p style="background-color: #d0d6da"> assoc&#8469; : &#8704; (n m k : &#8469;) &rarr; (n plus (m plus k)) &#8801; ((n plus m) plus k)<br>
+            assoc&#8469; n m k = ind&#8469; ? ? ? ?</p>
+            
+            <p>and after loading we get</p>
+            
+            <p style="background-color: #d0d6da"> assoc&#8469; : &#8704; (n m k : &#8469;) &rarr; (n plus (m plus k)) &#8801; ((n plus m) plus k)<br>
+            assoc&#8469; n m k = ind&#8469; {! 0!} {! 1!} {! 2!} {! 3!}</p>
+            
+            <p>with Agda's notes on which hole ought to be filled with a term of which type below. Hence, our finished proof will look like</p>
+            
+            <p style="background-color: #d0d6da"> assoc&#8469; : &#8704; (n m k : &#8469;) &rarr; (n plus (m plus k)) &#8801; ((n plus m) plus k)<br>
+            assoc&#8469; n m k = ind&#8469; (&#955; x &rarr; (x plus (m plus k))&#8801;((x plus m) plus k)) refl (&#955; n &rarr; &#955; p &rarr; ap succ p) n</p>
+            
+            <p>which works because of the definitional equality of &quot;succ x plus y&quot; and &quot;succ (x plus y)&quot;. Agda will accept any proof up to definitional equality without any problem. However, for propositional equalities be ready to use transport, defined as usual by</p>
+            
+            <p style="background-color: #d0d6da"> transport : &#8704; {l1 l2} {A : Set l1} {B : A &rarr; Set l2} {x y : A} &rarr;<br>
+             (x &#8801; y) &rarr; B x &rarr; B y<br>
+            transport refl x' = x'</p>
+            
+            <p>One would want the question signs to work inside holes as well, yet that, sadly, is not the case. One can understand why: Agda would need to do a lot of mental gymnastics to comprehend whether the given term will produce the needed type. That would also necessitate straightly backwards reasoning. All in all, if you think you will get away with just case analysis or a straightforward declaration of values, ask Agda a question right away after the definitional equality. If not, ask it to help with any term you have deemed to do enough of a role. Yet, once again, we remind you to get outside the holes if you consider to input a function. So, even if you are filling in the holes of some term, is you want to fill it with another term whose arguments you have not determined beforehand (and hence want to ask Agda about them), delete the holes and input your terms - with the question marks - in their place.</p>
+            
+            <p>Finally, let us talk about the K-axiom. The K-axiom is evil, just pure evil. Well, it is for people who want to do HoTT stuff. The axiom grants the uniqueness of identity proofs, i.e. uniqueness of paths, which goes against HoTT's main feature. Thankfully, we have a very straightforward way of removing it from consideration, writing the pragma</p>
+            
+            <p style="background-color: #d0d6da">
+            {-# OPTIONS --without-K #-}</p>
+            
+            <p>right at the top of our document. Just don't forget to do it!</p>
+            
+            <p>Finally, when you are done, you will probably want to use the definitions you used in one document in another one. In order to do this, start the document with</p>
+            
+            <p style="background-color: #d0d6da"> module X where</p>
+            
+            <p>
+            Where X is the name of your file without the .agda extension. This will make your document a library of its own, capable of being opened. That is, once a module X has been declared, we can import it by typing</p>
+            
+            <p style="background-color: #d0d6da"> open import X</p>
+            
+            <p>in the document. Note that other imported modules, as well as parmas used in the imported document, will not be imported by that command, you will need to type the other imports separately to make everything work.</p>
+            
+            <p>Finally, we wanted to once again recall that Agda does not have native HITs, for which you need to delve deeper into other people's advice of sidestepping the definitional challenges, and also recall that Agda does have support for cubical types, which one is also encouraged to look into on Agda's Git.</p>
+            
+            <p>With this, you should be more than well-equipped to use Agda with good aptitude. For any specific notes and documentation, one is encouraged to consult the Programming Language Foundations in Agda, providing a very thorough overview of all the needed topics in the core of Agda.</p>
+            
+            <p>In case you have any suggestions for the guide, please feel free to contact me via the provided email on my webpage.</p>
 
             
     </div>
