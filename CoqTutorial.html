@@ -174,7 +174,7 @@
                 
                 <p>Before delving into tactics themselves, let us talk about notation for a bit. All the definitions we used up till now were done in prefix form, which is the standard way that definitions are given. To specify infix notation, one should additionally write a line specifying the stand-in symbol as well how closely does the notation bind. For example, for our eq_alt we could write</p>
                 
-                <p>&quot; Notation &quot;a &#8801; b&quot; := (eq_alt a b) (at level 50, left associativity). &quot;</p>
+                <p style="background-color: #d0d6da"> Notation &quot;a &#8801; b&quot; := (eq_alt a b) (at level 50, left associativity). </p>
                 
                 <p>Note the parentheses on the right-hand side. Coq is lazy in the way that it really wants to know that it is being given a single bundled object to consider during definitions or tactics, so always remember to close up your functions in parentheses. Don't mind the associativity binding for now, just know that higher values bind more tightly.</p>
                 
