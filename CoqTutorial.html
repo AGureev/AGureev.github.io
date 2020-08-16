@@ -113,7 +113,7 @@
                    &quot;higher levels,&quot; as one frequently does mathematics. The examples below 
                    should serve as guides to these using the bool type of two elements and our Nat type:<br>
                  </p>
-                 <p style="background-color: #d0d6da"></p>Inductive bool : Type :=<br>
+                 <p style="background-color: #d0d6da">Inductive bool : Type :=<br>
                  &nbsp; &nbsp;| true<br>
                  &nbsp; &nbsp;| false.</p>
                 
@@ -128,7 +128,7 @@
                  <br>
                 </p>
                 
-                <p style="background-color: #d0d6da"></p>Fixpoint are_two_numbers_equal (n m : Nat) : bool :=<br>
+                <p style="background-color: #d0d6da">Fixpoint are_two_numbers_equal (n m : Nat) : bool :=<br>
                  match n with<br>
                  &nbsp; &nbsp; | zero => match m with <br>
                  &nbsp; &nbsp; &nbsp; &nbsp;| zero => true<br>
