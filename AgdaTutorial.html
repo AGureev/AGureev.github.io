@@ -1,7 +1,7 @@
 <html>
 <head>
 
-
+    <meta charset="UTF-8"> 
 <title>Artem Gureev's Webpage</title>
 <link href = "style.css" rel = "stylesheet" type = "text/css"> 
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap" rel="stylesheet">
@@ -43,9 +43,9 @@
             <p>Agda knows that you are about to present it with an inductive definition for a type by typing &quot;data&quot; at the beginning of the line. Afterward, we provide a name for our type, where it belongs type-wise and its constructors. Here is our canonical example of natural numbers (note that the double lines on the side specify comments in Agda which mak everything on the line a comment):</p>
             
             <p style="background-color: #d0d6da">
-            data &#8469; : Set where -- &quot;where&quot; is a stand-in for the start of the definition <br>
-            &nbsp; &nbsp;  zero : &#8469; -- note the space at the beginning of the line here <br>
-            &nbsp; &nbsp; succ : &#8469; &rarr; &#8469; -- and here <br>
+            data &#8469; : Set where   &nbsp;  &nbsp;  -- &quot;where&quot; is a stand-in for the start of the definition <br>
+            &nbsp; &nbsp;  zero : &#8469;  &nbsp;  &nbsp; -- note the space at the beginning of the line here <br>
+            &nbsp; &nbsp; succ : &#8469; &rarr; &#8469; &nbsp;  &nbsp;  -- and here <br>
             </p>
             
             <p>(alternatively, one can also enclose comments in {- -} brackets )</p>
@@ -240,7 +240,7 @@
             <p>We, however, did not yet show how to use inductions in action other than in trivial cases. For this purpose, let us return to the natural numbers once more in order to provide the most intuitive demonstration. First, let us define an induction term for the natural numbers:</p>
             
             <p style="background-color: #d0d6da"> ind&#8469; : &#8704; {l1} (C : &#8469; &rarr; Set l1) &rarr; (C zero) &rarr; <br>
-                &nbsp; (forall (n : &#8469;) &rarr; (C n &rarr; C (succ n) )) &rarr; <br>
+                &nbsp; &nbsp;  (forall (n : &#8469;) &rarr; (C n &rarr; C (succ n) )) &rarr; <br>
                 &nbsp; &nbsp;  &#8704; (n : &#8469;) &rarr; C n <br>
             ind&#8469; C p q zero = p<br>
             ind&#8469; C p q (succ n) = q n (ind&#8469; C p q n)</p>
