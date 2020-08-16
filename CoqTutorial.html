@@ -32,26 +32,222 @@
     <div class = "main_content">
         <div class = "header"><font size="+2"><strong>Artem Gureev : <em> Type Checking Chickens Tutorials : Coq </em>  </strong></font size> <hr> </div>
         <div class = "whatever">
-        <p> Welcome to Type Checking Chickens! This page contains brief guides to two interactive theorem provers supporting HoTT: Coq and Agda for people with a background in Type Theory. </p>
-
-            <p>For those that are only starting their journey in Type Theory and its applications, it is recommended to consult Coq and Agda's wonderful Foundation texts.
-             However, it is a bit tedious to go through them for people who already have a grasp on Type Theory and simply want a demonstration 
-             and an adequate cheatsheet of the language's syntactical needs to start working with the theorem provers right away. 
-             These two small documents are just for them. </p>
-            
-             <p>Note that this is supposed to serve as an extremely short introduction into the main functionality of Agda and Coq, 
-                 what that means is that some (if not all) of the material and actions that will be presented may be extremely inefficient or 
-                 generally have better ways of being done. Hence one is recommended to use the documents for a smooth start and then move to the 
-                 Foundations in order to find some proper treatment of selected topics and actions. </p>
-            
-            <p>I am thankful to Ilia Vlasov for helping in starting out using both systems and whose advice in mastering them I am trying to translate in written 
-                format through these tutorials so that other people lacking a practical guide can begin their journey smoother. </p>
-            <ul> 
-                <li><a style="text-decoration:none" href="CoqTutorial.html">Coq Tutorial</a></li>
-                <li><a style="text-decoration:none" href="AgdaTutorial.html">Agda Tutorial</a></li>
-            </ul>
-
-            
+            <p>Coq is an interactive theorem prover based on the Gallina functional programming language. It is widely used and has had a very good run, which means that it <br>
+                1) is stable <br>
+                2) has had a lot of small improvements making a big difference over the years</p>
+                
+                <p>Generally, for our purposes, it is great for two reasons:<br>
+                1) it has a full-on HoTT library one can install from the HoTT Git<br>
+                2) it is very natural and gives a wonderful idea of how to reason informally in Type Theory through tactics</p>
+                
+                <p>However, that does mean that Coq makes one basically overdose on syntactical sugar, sometimes so much so that when serious errors arise it becomes hard to understand what to do with them from the inside. Generally, use Coq if you want to have the informal part of Type Theory and if you prefer reasoning that is very much akin to reasoning in the HoTT book, while acknowledging that you will be skipping a lot of rigor in formulating proofs.</p>
+                
+                <p>Now, let us get right into the needed basics.</p>
+                
+                <p>So, we want to start up Coq, which we do by launching our IDE in a .v named document and do something. Let us first get the &quot;interactive&quot; part of interactive theorem proving. Coq has a way of going &quot;forward&quot; and &quot;backward&quot; in the interface. Stepping forward means making the Coq see a previously unchecked line one has written. When the IDE sees it, it checks that everything is well-typed, what exactly was defined (if it was) and, if relevant - i.e. in proofs - also tells the user what the hypotheses are and what is left to be proven. The stepping system is great and very intuitive once you start using it. The general commands for stepping forward in Emacs using Proof General are Cntrl+c Cntrl+n and Alt+down in VSCode using VSCoq. The stepping back commands are Cntrl+c Cntrl+u with Emacs and Alt+up in VSCode. If you want Coq to interpret everything up to a specific line, in Emacs click on the line in question and press Cntrl+c Cntrl+Enter. In VSCode also click on the needed line and use Alt+right. So, once you write something, you can check that it is well-typed or which goals and hypotheses you have, by moving forward in your document.</p>
+                
+                <p>
+                However, interpreting and interacting is impossible unless one has stuff to prove and stuff to declare.<br>
+                As a starting syntax, you need to know that the arrows for function types are designated by &quot;->&quot;, pi-types are specified by - for example - &quot;forall (A : Type), P A&quot; where P is a type family over the universe Type. Note the comma after the specified domain, which is the way we tell Coq that the parameters are chosen and we are going to give it the final dependants right after. Also note that Coq usually parses the information about variables through parentheses, i.e. specification of a term in a type goes inside the parentheses.</p>
+                
+                <p>One can see that &quot;Type&quot; is the stand-in for some universe U_i for some i. Coq is usually very smart with guessing which universe does a needed type belong to, so do not worry about the specifying the levels - at least for now. If any problem arises, you can specify the level of the universe by putting a number right after the type, akin to &quot;Type0&quot; (where most usual types lie).</p>
+                
+                <p>Generally, explicitly reasoning about the universes in Coq is quite tedious. There are several attributes one can use to, for example, talk about universe cumulativity and polymorphism, which are not inherent in Coq. However, these topics go a bit beyond our introduction and Coq's documentation has a separate document explaining these features that one is encouraged to consult.</p>
+                
+                <p>When you want to do anything, you need to declare how should Coq treat it. There are all in all only 4 types of markings one ought to remember.</p>
+                
+                <p>&quot;Definition&quot; is a very versatile one. It is a stand-in for theorems, lemmas, general functions that you want to declare &quot;interactively&quot; etc. Here is an example of a definition.</p>
+                
+                <p>Definition idmap : forall (A : Type), A -> A. <br>
+                 intros A a. (* this introduces names for a variable for a type A and a variable for a term of A *)<br>
+                 exact a. (* since the goal is to prove A, we need its witness, so a suffices, which we announce to Coq using exact *)<br>
+                 Defined.<br>
+                 <br>
+                 or, identically<br>
+                 <br>
+                Definition idmap (A : Type) : A -> A := fun a => a. <br>
+                 <br>
+                Now, this may be a lot to absorb in terms of notations (which we will make clear later), but let us slowly go through it. Firstly, note that anything in (* *) is considered a comment in Coq. Now, the definition above can be read either as a theorem or as a definition of a function, a dichotomy we will return to later for recursive definitions. One can notice that what I am doing is, choosing some type A, I am defining an identity map on that type. Or, identically, I can also look at this as a roof that given a witness of type A, I can produce a witness of type A. Generally, definitions are versatile and are the usual way one proves functions. Note that Definitions that have proofs in them need to be closed up by &quot;Defined.&quot; at the end. Make it an utmost need to remember that a dot must be placed after &quot;Defined.&quot; Dots are the way Coq understands that a certain command is being fed to it, a way to concentrate on one action at a time. Dots are paramount and ought to accompany any discrete action that you are communicating to Coq. You will see implicitly what that means in our examples, so pay attention to where the dots appear.</p>
+                
+                <p>We should also mention, that there is an alternative to ending our definitions with &quot;Defined.&quot; We could instead do away with &quot;Qed.&quot; However, it will appear impractical in most cases. &quot;Qed.&quot; truncates our definition, in a sense, forgetting its proof content and instead simply looking at it as a basic fact akin to an axiom. While this may seem ok in most cases, it is simply more practical to use &quot;Defined.&quot; as much as possible.</p>
+                
+                <p>Next, we look at the inductive definition of types. Let us look at the canonical example of an inductive type:</p>
+                
+                <p>Inductive Nat : Type :=<br>
+                 | zero<br>
+                 | succ : Nat -> Nat.</p>
+                
+                <p>Hence we first designate that we want to define a type and then give its constructors (note that the separation lines are important!). The constructors are, similarly to how the HoTT book presents it, specifying the only ways that elements of a type can be created. If these elements are &quot;plain,&quot; i.e. like our zero, simply laying around in Nat, then it just stipulates that Nat does have this element. By stipulating succ we also say that if there is some n in Nat, then we can always find a (succ n) in Nat. Similarly, we will be able to define a coproduct of two types by the generators &quot;inl : A -> A + B&quot; and &quot;inr : B -> A + B.&quot; Similarly, we can define the empty type to be generated by nothing, i.e.</p>
+                
+                <p>Inductive empty : Type := .</p>
+                
+                <p>Coq is powerful enough to, by the fact of inductive definitions, already define recursion and induction principles based simply on the given definition. Generally, inductive types the core of Coq and once you get used to them, you are almost set.</p>
+                
+                <p>Next, we also need a way to define things recursively, which is done by declaring &quot;Fixpoint&quot;.</p>
+                
+                <p>&quot; Fixpoint plus (n m : Nat) : Nat :=<br>
+                 match n with<br>
+                 | zero => m<br>
+                 | succ n' => succ (plus n m)<br>
+                 end. &quot;<br>
+                 <br>
+                 There are several things to note. Firstly, the general structure. The match command makes Coq see that you want to perform a definition on cases, which are given by the generators of the type the given variable belongs to. Secondly, note the &quot;=>&quot; arrows. These are &quot;explicit mappings,&quot; which in usual mathematics provide an explicit pair of a domain/codomain value in a function. Similarly one can declare a function &quot;fun x => f x&quot; where &quot;f x&quot; is some function with x substituted for a variable. Also, all recursive definitions ought to end with the &quot;end.&quot; command, otherwise, Coq will still search for arguments. <br>
+                 <br>
+                 Of course, one can perform matching on a larger number of variables given that they belong to inductive products, also performing recursion on &quot;higher levels,&quot; as one frequently does mathematics. The examples below should serve as guides to these using the bool type of two elements and our Nat type:<br>
+                 <br>
+                 Inductive bool : Type :=<br>
+                | true<br>
+                | false.</p>
+                
+                <p>Definition andb (b c : bool) : bool :=<br>
+                 match b with <br>
+                 | true => match c with <br>
+                 | true => true <br>
+                 | false => false<br>
+                 end<br>
+                 |false => false<br>
+                 end.<br>
+                 <br>
+                </p>
+                
+                <p>Fixpoint are_two_numbers_equal (n m : Nat) : bool :=<br>
+                 match n with<br>
+                 | zero => match m with <br>
+                 | zero => true<br>
+                 | succ m => false<br>
+                 end<br>
+                 | succ k => match m with <br>
+                 | zero => false<br>
+                 | succ m => are_two_numbers_equal k m<br>
+                 end<br>
+                 end.<br>
+                 <br>
+                 <br>
+                Fixpoint is_the_number_even (n : Nat) : bool :=<br>
+                 match n with<br>
+                 | zero => true<br>
+                 | succ zero => false<br>
+                 | succ (succ n) => evenb n <br>
+                 end.</p>
+                
+                <p> <br>
+                Finally, we come to the axioms. This is something we really need to do HoTT with, since functional extensionality and Univalence are not theorems we can deduce here. Let us declare functional extensionality.</p>
+                
+                <p>&quot; Axiom funext : forall (A B : Type) (f g : A -> B) (x : A), f x = g x. &quot;</p>
+                
+                <p>This should be enough for Coq to accept the axiom, which we will be able to then use in proofs.</p>
+                
+                <p>Now, since we began talking about HoTT it is important to mention that identity in Coq - identified with the proper equality sign &quot;=&quot; - does not function very well in HoTT. There are two fixes for that. The evident one is to just define an alternative equality such as</p>
+                
+                <p>&quot; Inductive eq_alt (A : Type) : A -> A -> Type := <br>
+                 | refl : forall (x : A), eq_alt A x x . &quot;<br>
+                 <br>
+                This way we have identity type which is the canonical MLTT one, generated by refl. However, fair warning, using this definition will make your life harder with Coq, which is surely not why you would want to use it. The point is that using eq_alt will make rewrite, one of the most useful Coq tactics, useless for your purposes since it uses proper equality. Of course, you can get rid of that problem by specifying your own tactics, yet this is a tutorial for beginners, so we should not assume that anybody will go as deep into such things. The point is, if you are not planning to dive right into the depths anytime soon, you should try to avoid this method. One uses Coq because it is a very stable and HAS AN extremely intuitive way of argumentation, which is very much mirrored with rewrite's ability to replace equal terms. Without it, using axillary methods (which usually involve a lot of not-so-pretty transport applications) makes Coq lose a lot of its sugar.</p>
+                
+                <p>What we would recommend is to instead get the HoTT library with its identity type. While that will make some notation occupied, it will allow to use the usual &quot;=&quot; symbol for the desired identity type while also retaining all the tactics.</p>
+                
+                <p>Before delving into tactics themselves, let us talk about notation for a bit. All the definitions we used up till now were done in prefix form, which is the standard way that definitions are given. To specify infix notation, one should additionally write a line specifying the stand-in symbol as well how closely does the notation bind. For example, for our eq_alt we could write</p>
+                
+                <p>&quot; Notation &quot;a &#8801; b&quot; := (eq_alt a b) (at level 50, left associativity). &quot;</p>
+                
+                <p>Note the parentheses on the right-hand side. Coq is lazy in the way that it really wants to know that it is being given a single bundled object to consider during definitions or tactics, so always remember to close up your functions in parentheses. Don't mind the associativity binding for now, just know that higher values bind more tightly.</p>
+                
+                <p>Also, if the above definition does not work once you have put it in Coq, don't worry, that is understandable in our context, since eq_alt does not even take two arguments in, it takes three if we include our choice of a type! In this way, our definition would need to talk about something like eq_alt A a b, which is not something we especially like to do in maths. We want to talk about stuff like equality as a binary relation, rather than dealing with more objects (at least notationally). Coq gets it and allows the user to make it &quot;forget&quot; extra arguments, using curly brackets instead of round ones. That is, we can define our alternative identity as</p>
+                
+                <p>&quot; Inductive eq_alt {A : Type} : A -> A -> Type :=<br>
+                 | refl : forall {x : A}, eq_alt x x. &quot;<br>
+                 <br>
+                Now, this allows us to do several things. Making the choice of type implicit makes us able to write just &quot;eq_alt a a&quot; to specify out function, moreover, the implicitness of the term for the refl constructor can allow users to sometimes just use &quot;refl&quot; as an argument in a proof, which - in this case- almost always works, since if given an equality between two terms, Coq can pretty easily see which terms it ought to make equal.</p>
+                
+                <p>Specifically, making arguments implicit makes Coq &quot;guess&quot; which arguments should go in its place even without their names being given. However, Coq isn't almighty, so it sometimes cannot decipher what goes where and does not allow the user to go forward. In this case, one can always provide Coq with an explicit assignment of values. For example, suppose, for the sake of argument, that Coq does not get what is the type (which ought to be T) of the terms x and y for which we construct an equality &quot;eq_alt x y&quot;. What you need to do is simply type in &quot;@eq_alt T x y.&quot; That is, the @ symbol makes Coq look at the function as having all explicit arguments. In case we have some function foo with four arguments and the first two made implicit, we can type in something regarding &quot;foo x y&quot; and if Coq cannot match only the - for example - first implicit argument, then the user may write &quot;@foo _ z x y&quot; and it will accept this specification. So the underscore may really help out in case you will not want to remember any information that Coq does not want to ask about.</p>
+                
+                <p>Now, let is come to tactics. Tactics are commands mimicking informal argumentation in Type Theory. Perfect examples of that kind of reasoning are given in the HoTT book. So, generally, tactics are ways of telling Coq what exactly do you want to do with some element that you can specify. We will look at a small number of essential tactics.</p>
+                
+                <p>The first one is &quot;intro x.&quot; It is a stand-in for &quot;let x be _&quot; in a mathematics paper, where x ought to be the name of a variable you introduce and _ the name of its type, which Coq should infer beforehand. It introduces a variable based on what Coq has in the goal. Recall that Coq likes to get its information in small batches, so you might expect you to write a separate &quot;intro _.&quot; line for every new variable, however, we also have an &quot;intros _ ... _&quot; command which allows for the introduction of several variables at a line.</p>
+                
+                <p>Then, we have, given x a term of an inductive type, &quot;induction x as [X1 | ... | Xn].&quot; where n is the number of constructors the type has. Now, what it does is introduce a possibility to work with cases and solve the goal for every constructor. Now, X1,...,Xn stand for the variable names that Coq gives the hypotheses. It does not matter if we have &quot;bare&quot; constructors, that just declare some element being in a type - like our zero in Nat - but it does matter for constructors such as inl, inr, or succ, which take some term from one type and produce another. The X1,..,Xn markers exactly name such terms taken from other types. One can do without them, simply typing in &quot;induction x.&quot; which usually is fine, yet which can produce some nasty naming of the hypotheses from Coq. There is a weaker command &quot;destruct x as [X1 | ... | Xn].&quot; that Coq has, which is just case analysis without possible inductive hypotheses. If you are minimalist, use &quot;destruct&quot; when needed so as to not overburden your interface with unnecessary hypotheses. However, inasmuch as we are concerned with having a proof first and foremost, we can always use &quot;induction.&quot;</p>
+                
+                <p>Now, we have &quot;simpl&quot;. Simpl is a wonderful tactic that, while having little to do with helping Coq, helps the user understand what is going on, by computationally simplifying the goal as much as possible. Sometimes it does help Coq figure stuff out, especially with proofs where you just want to get away with the reflexivity argument for equality. Simpl also can help a lot with induction on terms! For example, suppose you have some hypothesis &quot; p : pr1 (a, b) = pr1(c, d) &quot; where pr1 stands for the projection of the first argument in a pair. Coq will usually not want to do anything when you ask it to induct on p, since the type of equality is not &quot;bare,&quot; i.e. not just elements of some type A but one that goes alongside the data of a function mapping some other element to A. However, by asking Coq to &quot;simpl in p&quot; - i.e. specifying that you want to simplify not the goal but the hypothesis - it will instead produce a hypothesis &quot;p : a = c&quot; via the computational definition of pr1 and hence allow for induction.</p>
+                
+                <p>Similarly, &quot;unfold foo&quot; where foo is some function is the goal, makes Coq look into foo's definition, and presents it not by its name but by definition. This helps out Coq a bunch in figuring out definitional equalities that are entangled with functional applications and makes applying &quot;simpl&quot; worth trying in several ways before and after using &quot;unfold.&quot;</p>
+                
+                <p>We also have the &quot;rewrite&quot; command. Rewrite allows the user to replace some subterm in the goal or in the hypothesis (as long as it does not appear in the goal) given that it is equal - and that means properly equal as in using &quot;=&quot; - by some previous proof to some other term. For example, if a goal has a subterm &quot;x&quot; and we want to replace it by subterm &quot;y&quot; and we have a proof &quot;p : x=y&quot; then we simply need to write &quot;rewrite p.&quot; to make out the replacement. Sometimes Coq needs a pointer as to which exact term ought to be replaced, in which case we simply place &quot;->&quot; or &quot;<-&quot; before giving rewrite the proof so as to specify in which direction should the replacement go, just like this: &quot;rewrite -> p.&quot; As with &quot;simpl,&quot; if you want to apply the tactic to some hypothesis, just specify to which by &quot;in&quot; command after specifying the proof just as &quot;rewrite p in q&quot;.</p>
+                
+                <p>A neat tool for introducing additional hypotheses is the &quot;assert&quot; tactic. When we type &quot;assert x as y&quot; we are asking Coq to create a subgoal - which automatically takes priority - x such that, if proven, will be put as a hypothesis once proven, with a witness y.</p>
+                
+                <p>&quot;reflexivity&quot; is a cool command but one that applies - just as &quot;rewrite&quot; - only when you use the standard Coq equality. It automatically proves the equality of the - definitionally - same terms.</p>
+                
+                <p>Finally, we have &quot;exact,&quot; which is what you need once you know the exact proof of your goal. All you need to do is to type &quot;exact x.&quot; and Coq will check whether it is the proof of the goal. However, this tactic is strict, if you have proven the goal up to only propositional, rather definitional equality of a given type, it will not accept it. If you are familiar with the transport function, what we mean is that Coq will not do the transport for you unless the equality between parameters is judgemental. Exact is one of the few tactics which is quite strict and makes the user get out of the informal back to the syntax.</p>
+                
+                <p>Now, as we have mentioned, Coq can create subgoals. When it does, it needs to know to which subgoal are you applying your next given information and will not move until you do so (well, depending on your IDE really). What we need is a way to make Coq focus on one goal, which we can accomplish by putting signs like &quot;-&quot; or &quot;+&quot; or &quot;++&quot; etc. in front of your next step. This automatically tells Coq that you will first prove the first subgoal it has presented. Note that subgoals are generated in batches and only one symbol per batch can be used. That is, if you have two subgoals to prove, you use &quot;-&quot; to designate that you are starting the first one and then &quot;-&quot; to designate that you will start the second one once you're done, but also you will then not be able to use &quot;-&quot; for any other subgoals created in the process.</p>
+                
+                <p>Now, let us also look at the use of tactics as well as the double interpretation of definitions. First, look at an equivalent way of defining path concatenation below using different tactics.</p>
+                
+                <p>&quot; Definition concat_1: forall {A : Type} {x y z : A},<br>
+                (x=y) -> (y=z) -> (x=z).<br>
+                intros A x y z p q.<br>
+                induction p.<br>
+                rewrite q.<br>
+                reflexivity.<br>
+                Defined. &quot;</p>
+                
+                <p>&quot; Definition concat_2: forall {A : Type} {x y z : A},<br>
+                (x=y) -> (y=z) -> (x=z).<br>
+                intros A x y z p q.<br>
+                induction p.<br>
+                exact q.<br>
+                Defined. &quot;</p>
+                
+                <p>Note that here, we can talk about concat 1 and 2 as either definition of functions or proofs. These are both functions that give, given witnesses of equalities between x y and y z respectively a witness of x=z and also, proofs that, given the fact that x=y and y=z we can prove that x=z as well. This is a very basic dichotomy of type theory, yet one which can play a practical role in Coq. What that means is that we can define function several ways, just as addition below:</p>
+                
+                <p>as a recursive function</p>
+                
+                <p>&quot; Fixpoint plus_rec (n k : Nat) : Nat :=<br>
+                 match n with<br>
+                 |zero => k<br>
+                 | succ p => succ (plus_alt p k)<br>
+                 end. &quot;</p>
+                
+                <p>or as a proof in an appropriate sense</p>
+                
+                <p>&quot;Definition plus (n k : Nat) : Nat.<br>
+                 induction n.<br>
+                 - exact k.<br>
+                 - exact (succ IHn).<br>
+                Defined. &quot;</p>
+                
+                <p>The interesting point is that the latter definitions are computationally easier for Coq to understand and unfold, yet are harder to define for the user, who may be lacking direction (especially when encountering the hypotheses naming). We urge the reader to as much as possible define functions in a &quot;proof-like&quot; way, as it will pay off in the long run. However, there is not a lot of downsides for using usual function definitions other than possibly getting away from the philosophy of type theory as a logical tool dealing primarily with proofs. Here are some final examples that may elucidate some usages of the @ command as well as how proofs may go with alternative equalities.</p>
+                
+                <p>
+                Definition transport : forall {A : Type} {B : A -> Type} {x y : A},<br>
+                (x &#8801; y) -> (B x) -> (B y).<br>
+                intros A B x y p.<br>
+                intro H.<br>
+                induction p.<br>
+                exact H.<br>
+                Defined.</p>
+                
+                <p>
+                Definition add_zero : forall (n : Nat), plus n zero &#8801; n.<br>
+                 intro n.<br>
+                 induction n.<br>
+                 - simpl.<br>
+                 exact (refl).<br>
+                 - simpl.<br>
+                 exact (@transport N (fun x => succ x &#8801; succ n) (n) (plus n zero) (inverse_path IHn) (refl) ) .<br>
+                </p>
+                
+                <p>Defined.</p>
+                
+                <p>If you want to start up a new document while keeping about your theorems and definitions, you can either declare a module in the document which you want to load in the new one (which is something you can read up on in the Coq documentation) or you can simply type &quot;Load x.&quot; where x is the name of your document without the .v extension at the top of the new project and you will be all set.</p>
+                
+                <p>With this, we are pretty much done and you are ready to formalize all your fundamentals in Coq. 
+                    For any additional materials, please consult the Software Foundations texts, which cover everything one needs to know about Coq. 
+                    However, note that the practicing HoTT theorist will find some discomfort with the present material at some point, 
+                    since they will have no description of defining higher inductive types. Sadly, there is no pretty way to do it, neither 
+                    in Coq nor in Agda. Both do not have HIT natively, which means that have to be defined &quot;privately.&quot; So, once you will need to use truncations, we recommend the reader to consult the formalizations available on the HoTT Git to see what possible ways we have of sidestepping this challenge in Coq.</p>
+                
+                <p>In case you have any suggestions for the guide, please feel free to contact me via the provided email on my webpage.</p>
     </div>
             
     </div>
