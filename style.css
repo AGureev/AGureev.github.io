@@ -11,7 +11,7 @@ h9 span {
   background-color: #d0d6da; 
 }
 
-.wrapper .sidebar ul li a:hover {position: relative; right: -5px ;}
+/* .wrapper .sidebar ul li a:hover {position: relative; right: -5px ;} */
 
 
 .wrapper { display: flex; 
