@@ -7,6 +7,28 @@ body {
   line-height: 27px;
 }
 
+:root {
+  --mainColor: white;
+}
+
+b {
+  background:
+     linear-gradient(
+       to bottom, var(white) 0%,
+       var(white) 100%
+     );
+    background-position: 0 100%;
+    background-repeat: repeat-x;
+    background-size: 4px 4px;
+  color: #000;
+  text-decoration: none;
+  transition: background-size .2s;
+}
+
+b:hover {
+  background-size: 4px 50px;
+}
+
 h9 span { 
   background-color: #d0d6da; 
 }
@@ -56,3 +78,53 @@ display: block;
 hr { display: block; height: 1px;
   border: 0; border-top: 1px solid black;
   margin: 1.2em 0; padding: 0; }
+
+
+
+
+  .test {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -moz-osx-font-smoothing: grayscale;
+    position: relative;
+    -webkit-transition-property: color;
+    transition-property: color;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    background: #2bffd5;
+    padding: 1px 15px;
+    color: #fff;
+    text-decoration: none;  
+  }
+  .test:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #fff;
+    -webkit-transform: scaleY(0);
+    transform: scaleY(0);
+    -webkit-transform-origin: 50% 100%;
+    transform-origin: 50% 100%;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+    -webkit-transition-duration: 0.5s;
+    transition-duration: 0.5s;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+  }
+  .test:hover, .test:focus, .test:active {
+    color: white;
+  }
+  .test:hover:before, .test:focus:before, .test:active:before {
+    -webkit-transform: scaleY(1);
+    transform: scaleY(1);
+  }
