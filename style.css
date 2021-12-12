@@ -1,7 +1,15 @@
 
 
+
+
+ul {
+    padding: 0;
+    list-style-type: none;
+}
+
+
 body {
-  background-color : #ffffff;} 
+  background-color : #FFFAFA;} 
 body {
   font-family: 'Quicksand', sans-serif;
   font-size: 18px;
@@ -67,18 +75,26 @@ color: black;
 display: block;
 }
 
-.wrapper .main_content {
-  width: 100%;
-  margin-left: 170px;
-}
+.wrapper .main_content 
 
 .wrapper .main_content .header {margin-top: 15px}
 
 .wrapper .main_content .contact {margin-top: 50px;}
 
+.wrapper .main_content .whatever {
+  width: 60%;
+  margin-left: 170px;
+ 
+}
+
 .wrapper .main_content .whatever ul li {
   margin: 10px 0;
 }
+
+.wrapper .side_note .header { text-align: right;
+                              width: 13%; 
+                              margin-top: 50px;
+                              margin-left: 10px}
 
 hr { display: block; height: 1px;
   border: 0; border-top: 1px solid black;
